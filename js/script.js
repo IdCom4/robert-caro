@@ -1,20 +1,27 @@
+
+
+
 $(document).ready(function() {
+	$("#p-1").css("opacity", "0");
+	$("#p-2").css("opacity", "0");
+	$("#p-3").css("opacity", "0");
+
+
 
 	var stars = $("#stars").offset();
 	var sky = $("#sky").offset();
 	var forest = $("#forest").offset();
 	var ground = $("#ground").offset();
-	// $("#a-stars").text(stars.top);
-	// $("#a-sky").text(sky.top);
-	// $("#a-forest").text(forest.top);
-	// $("#a-ground").text(ground.top);
-	// console.log("stars.top = " + stars.top);
-	// console.log("sky.top = " + sky.top);
-	// console.log("forest.top = " + forest.top);
-	// console.log("ground.top = " + ground.top);
+
+	var yOffset;
+
+	var svgTop;
+
+	var swi = 0;
+	var n = 0;
+
 	$(window).scroll(function () {
 		var posScroll = $(window).scrollTop();
-		//$("#a-stars").text(posScroll + " / " + stars.top);
 		if(stars.top > posScroll)
 		{
 			$("#a-stars").removeClass("active");
@@ -50,8 +57,77 @@ $(document).ready(function() {
 			$("#a-forest").removeClass("active");
 			$("#a-ground").addClass("active");
 		}
-	});
+		yOffset = $(window).scrollTop() / 5;
+	    $("#stars").css('background-position', '0px '+-yOffset+'px');
+	    yOffset = $(window).scrollTop() / 10;
+	    $("#sky").css('background-position', '0px '+-yOffset+'px');
 
+	    svgTop = $("#sky").offset();
+	    svgTop.top -= 250;
+	    yOffset = $(window).scrollTop();
+	    if(yOffset > svgTop.top)
+		{
+			$("#cable").css("stroke-dashoffset", "0");
+			console.log("coucou");
+		}
+		
+		
+		if(yOffset + 400 > $("#p-1").offset().top)
+		{
+			$("#p-1").css("transition", "2s");
+			$("#p-1").css("opacity", "1");
+
+		}
+		if(yOffset + 400 > $("#p-2").offset().top)
+		{
+			$("#p-2").css("transition", "2s");
+			$("#p-2").css("opacity", "1");
+		}
+		if(yOffset + 400 > $("#p-3").offset().top)
+		{
+			$("#p-3").css("transition", "2s");
+			$("#p-3").css("opacity", "1");
+		}
+		if(yOffset + 400 > $("#cross").offset().top)
+		{
+			$("#cross").css("top", "65vh");
+			$("#cross").css("box-shadow", "0 10px 10px black");
+		}
+		else
+		{
+			$("#cross").css("top", "70vh");
+			$("#cross").css("box-shadow", "none");
+		}
+
+		if(yOffset > swi)
+		{
+			n += 3;
+			if(n > 360)
+			{
+				n = 0;
+			}
+			$("header a i").css("transform", "rotate("+n+"deg)");
+		}
+		else {
+			n -= 3;
+			if(n < 0)
+			{
+				n = 360;
+			}
+			$("header a i").css("transform", "rotate("+n+"deg)");
+		}
+		swi = yOffset;
+		
+	}); 
+	$("#cross button").click(function () {
+		$("header").fadeOut(400);
+		$("footer").removeClass("d-none");
+
+	});
+	$("#modal button").click(function () {
+		$("header").fadeIn(400);
+		$("footer").addClass("d-none");
+	});
 
 	$('.js-scrollTo').on('click', function() {
 		var page = $(this).attr('href');
